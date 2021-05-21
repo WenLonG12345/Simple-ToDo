@@ -20,8 +20,11 @@ data class Todo(
     val description: String,
 
     @ColumnInfo(name = "priority")
-    val priority: Int,
+    val priority: Int,   // 0 - low, 1 - medium, 2 - high
 
-    @ColumnInfo(name = "createdAt")
-    val createdAt: Date
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+
+    @ColumnInfo(name = "is_task_done")
+    val isTaskDone: Boolean = false
 ): Parcelable

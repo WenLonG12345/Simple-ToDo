@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.simple_todo.R
 import com.example.simple_todo.databinding.FragmentTodoListBinding
@@ -39,7 +40,7 @@ class TodoListFragment: Fragment(R.layout.fragment_todo_list) {
     private fun setupRecyclerView() {
         todoListAdapter = TodoListAdapter { onTodoClick(it) }
         binding.rvTodo.run {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = todoListAdapter
         }
     }

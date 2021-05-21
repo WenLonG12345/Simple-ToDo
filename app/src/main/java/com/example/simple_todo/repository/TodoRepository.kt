@@ -25,4 +25,11 @@ class TodoRepository @Inject constructor(
             todoDao.delete(todo)
         }
     }
+
+    suspend fun updateTodoStatus(id: Int, isDone: Boolean) {
+        withContext(Dispatchers.IO) {
+            todoDao.setTodoIsDone(id, isDone)
+        }
+
+    }
 }

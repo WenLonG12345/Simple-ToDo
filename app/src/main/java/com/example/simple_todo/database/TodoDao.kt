@@ -16,4 +16,7 @@ interface TodoDao {
 
     @Delete
     fun delete(data: Todo)
+
+    @Query("UPDATE todo SET  is_task_done = :isDone WHERE id = :id")
+    fun setTodoIsDone(id: Int, isDone: Boolean)
 }

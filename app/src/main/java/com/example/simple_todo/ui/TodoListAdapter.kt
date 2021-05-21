@@ -2,6 +2,7 @@ package com.example.simple_todo.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,8 @@ class TodoListAdapter(
                     1 -> ivPriority.setImageResource(R.drawable.ic_priority_medium)
                     2 -> ivPriority.setImageResource(R.drawable.ic_priority_high)
                 }
+
+                ivMarkDone.isVisible = todo.isTaskDone
 
                 rlTodo.setOnClickListener {
                     onClick(todo)

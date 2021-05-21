@@ -34,4 +34,10 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    fun onUpdateTodoStatus(id: Int, isDone: Boolean) {
+        viewModelScope.launch {
+            todoRepository.updateTodoStatus(id, isDone)
+        }
+    }
+
 }
