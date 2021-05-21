@@ -2,6 +2,7 @@ package com.example.simple_todo.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,7 @@ class TodoListFragment: Fragment(R.layout.fragment_todo_list) {
         setupRecyclerView()
 
         sharedViewModel.allTodos.observe(viewLifecycleOwner, {
+            binding.llEmptyList.isVisible = it.isEmpty()
             todoListAdapter.submitList(it)
         })
 
@@ -40,7 +42,7 @@ class TodoListFragment: Fragment(R.layout.fragment_todo_list) {
     private fun setupRecyclerView() {
         todoListAdapter = TodoListAdapter { onTodoClick(it) }
         binding.rvTodo.run {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = todoListAdapter
         }
     }
