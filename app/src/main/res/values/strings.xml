@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Simple-ToDo</string>
+    <string name="priority_low">Low Priority</string>
+    <string name="priority_normal">Normal Priority</string>
+    <string name="priority_high">High Priority</string>
+    <string name="priority_title">Choose a priority</string>
+    <string-array name="choice_priority">
+        <item>@string/priority_title</item>
+        <item>@string/priority_low</item>
+        <item>@string/priority_normal</item>
+        <item>@string/priority_high</item>
+    </string-array>
+
+</resources>

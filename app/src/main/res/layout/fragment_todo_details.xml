@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="250dp"
+    android:padding="20dp"
+    android:background="@drawable/bg_dialog">
+
+    <ImageView
+        android:id="@+id/iv_priority"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/ic_priority_high" />
+
+    <TextView
+        android:id="@+id/tv_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/iv_priority"
+        android:layout_marginStart="10dp"
+        android:text="Priority"/>
+
+    <ImageView
+        android:id="@+id/iv_todo_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/tv_todo_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/iv_priority"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_todo_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_todo_title"
+        android:text="Description"/>
+
+
+
+
+</RelativeLayout>
