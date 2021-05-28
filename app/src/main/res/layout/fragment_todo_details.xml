@@ -36,6 +36,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/iv_todo_edit"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/iv_todo_delete"/>
+
+    <ImageView
         android:id="@+id/iv_todo_delete"
         android:layout_width="25dp"
         android:layout_height="25dp"

@@ -6,9 +6,11 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.Slide
 import com.example.simple_todo.R
 import com.example.simple_todo.databinding.FragmentAddTodoBinding
@@ -26,6 +28,9 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
     private var spinnerItem = arrayOf<String>()
     private var actionBar: ActionBar? = null
     private val sharedViewModel by activityViewModels<SharedViewModel>()
+
+    private val args by navArgs<AddTodoFragmentArgs>()
+    private var existTodo: Todo? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentAddTodoBinding.bind(view)
@@ -59,6 +64,14 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerPriority.adapter = spinnerAdapter
+
+        existTodo = args.todo
+        existTodo?.let {
+            (activity as AppCompatActivity).supportActionBar?.title = "Edit To-do"
+            binding.etTitle.setText(it.title)
+            binding.etDescription.setText(it.description)
+            binding.spinnerPriority.setSelection(it.priority + 1)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,12 +81,23 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.btn_save -> {
-                val newTodo = Todo(
-                    title = binding.etTitle.text.toString(),
-                    description = binding.etDescription.text.toString(),
-                    priority = binding.spinnerPriority.selectedItemPosition - 1,
-                    createdAt = Calendar.getInstance().time
-                )
+                val newTodo = if(existTodo != null) {
+                    Todo(
+                        id = existTodo!!.id,
+                        title = binding.etTitle.text.toString(),
+                        description = binding.etDescription.text.toString(),
+                        priority = binding.spinnerPriority.selectedItemPosition - 1,
+                        createdAt = Calendar.getInstance().time
+                    )
+                } else {
+                    Todo(
+                        title = binding.etTitle.text.toString(),
+                        description = binding.etDescription.text.toString(),
+                        priority = binding.spinnerPriority.selectedItemPosition - 1,
+                        createdAt = Calendar.getInstance().time
+                    )
+                }
+
                 sharedViewModel.onSaveNewTodo(newTodo)
                     .observe(viewLifecycleOwner, { isSuccessSaved ->
                         if(isSuccessSaved) {

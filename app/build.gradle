@@ -50,10 +50,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // Livecycle-ktx
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
+    // Activity & Fragment ktx
     implementation "androidx.activity:activity-ktx:1.3.0-alpha07"
     implementation 'androidx.fragment:fragment-ktx:1.3.3'
 
@@ -66,9 +68,6 @@ dependencies {
     // room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    kapt "android.arch.persistence.room:compiler:1.1.1"
-    implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.room:room-ktx:$roomVersion"
     testImplementation "androidx.room:room-testing:$roomVersion"
 

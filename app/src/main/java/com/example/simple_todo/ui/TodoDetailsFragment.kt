@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.simple_todo.R
 import com.example.simple_todo.databinding.FragmentTodoDetailsBinding
@@ -74,6 +75,11 @@ class TodoDetailsFragment: DialogFragment(R.layout.fragment_todo_details) {
                         "Mark as Done".showToast(requireContext())
                     }
                     dialog?.dismiss()
+                }
+
+                binding.ivTodoEdit.setOnClickListener {
+                    val action = TodoDetailsFragmentDirections.actionTodoDetailsFragmentToAddTodoFragment(todo)
+                    findNavController().navigate(action)
                 }
             }
         }

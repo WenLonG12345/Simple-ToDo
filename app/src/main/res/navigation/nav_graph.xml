@@ -25,6 +25,11 @@
         <action
             android:id="@+id/action_addTodoFragment_to_todoListFragment"
             app:destination="@id/todoListFragment" />
+        <argument
+            android:name="todo"
+            app:argType="com.example.simple_todo.model.Todo"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <dialog
         android:id="@+id/todoDetailsFragment"
@@ -36,5 +41,8 @@
             app:argType="com.example.simple_todo.model.Todo"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_todoDetailsFragment_to_addTodoFragment"
+            app:destination="@id/addTodoFragment" />
     </dialog>
 </navigation>

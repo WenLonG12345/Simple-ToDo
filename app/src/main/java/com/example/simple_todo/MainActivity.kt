@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbarMain)
+//        setSupportActionBar(binding.toolbarMain)
 
         navHostFrag = supportFragmentManager.findFragmentById(R.id.main_container_view) as NavHostFragment
         navController = navHostFrag.navController
