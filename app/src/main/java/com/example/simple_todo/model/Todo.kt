@@ -27,4 +27,6 @@ data class Todo(
 
     @ColumnInfo(name = "is_task_done")
     val isTaskDone: Boolean = false
+
+
 ): Parcelable

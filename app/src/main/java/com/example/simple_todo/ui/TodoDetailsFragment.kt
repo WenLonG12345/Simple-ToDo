@@ -28,6 +28,11 @@ class TodoDetailsFragment: DialogFragment(R.layout.fragment_todo_details) {
     private val sharedViewModel by activityViewModels<SharedViewModel>()
     private var selectedTodo: Todo? = null
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setWindowAnimations(R.style.dialog_animation_slide)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentTodoDetailsBinding.bind(view)
 

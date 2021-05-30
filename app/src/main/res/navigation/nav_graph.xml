@@ -12,7 +12,11 @@
         android:label="Simple To-Do" >
         <action
             android:id="@+id/action_todoListFragment_to_addTodoFragment"
-            app:destination="@id/addTodoFragment" />
+            app:destination="@id/addTodoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_todoListFragment_to_todoDetailsFragment"
             app:destination="@id/todoDetailsFragment" />

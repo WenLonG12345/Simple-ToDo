@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.AlarmManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -16,8 +17,11 @@ import com.example.simple_todo.R
 import com.example.simple_todo.databinding.FragmentAddTodoBinding
 import com.example.simple_todo.model.Todo
 import com.example.simple_todo.utils.showToast
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sign
 
@@ -31,11 +35,27 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
 
     private val args by navArgs<AddTodoFragmentArgs>()
     private var existTodo: Todo? = null
+    private lateinit var timePicker: MaterialTimePicker
+    private var alarmStartTime: Calendar? = null
+    private lateinit var alarmManager: AlarmManagerCompat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentAddTodoBinding.bind(view)
 
         setHasOptionsMenu(true)
+        setupSpinner()
+//        setupScheduleTimePicker()
+
+        existTodo = args.todo
+        existTodo?.let {
+            (activity as AppCompatActivity).supportActionBar?.title = "Edit To-do"
+            binding.etTitle.setText(it.title)
+            binding.etDescription.setText(it.description)
+            binding.spinnerPriority.setSelection(it.priority + 1)
+        }
+    }
+
+    private fun setupSpinner() {
         spinnerItem = resources.getStringArray(R.array.choice_priority)
 
         val spinnerAdapter = object : ArrayAdapter<String>(
@@ -64,15 +84,37 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerPriority.adapter = spinnerAdapter
-
-        existTodo = args.todo
-        existTodo?.let {
-            (activity as AppCompatActivity).supportActionBar?.title = "Edit To-do"
-            binding.etTitle.setText(it.title)
-            binding.etDescription.setText(it.description)
-            binding.spinnerPriority.setSelection(it.priority + 1)
-        }
     }
+
+//    private fun setupScheduleTimePicker() {
+//        binding.switchScheduleTime.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if(isChecked) {
+//                timePicker.show(childFragmentManager, "timepicker")
+//            } else {
+//                binding.tvScheduleTime.text = null
+//            }
+//        }
+//
+//        timePicker = MaterialTimePicker.Builder()
+//            .setTimeFormat(TimeFormat.CLOCK_12H)
+//            .setTitleText("Select Schedule Time")
+//            .build()
+//
+//        timePicker.addOnPositiveButtonClickListener {
+//            alarmStartTime = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, timePicker.hour)
+//                set(Calendar.MINUTE, timePicker.minute)
+//                set(Calendar.SECOND, 0)
+//            }
+//            val sdf = SimpleDateFormat("h:mm a")
+//            binding.tvScheduleTime.text = sdf.format(alarmStartTime?.time)
+//        }
+//
+//        timePicker.addOnCancelListener {
+//            binding.switchScheduleTime.isChecked = false
+//        }
+//
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_add_todo, menu)
@@ -97,6 +139,8 @@ class AddTodoFragment : Fragment(R.layout.fragment_add_todo) {
                         createdAt = Calendar.getInstance().time
                     )
                 }
+
+
 
                 sharedViewModel.onSaveNewTodo(newTodo)
                     .observe(viewLifecycleOwner, { isSuccessSaved ->

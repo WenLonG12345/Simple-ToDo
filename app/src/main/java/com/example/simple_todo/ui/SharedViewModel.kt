@@ -4,9 +4,11 @@ import androidx.lifecycle.*
 import com.example.simple_todo.model.Todo
 import com.example.simple_todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.sign
@@ -16,21 +18,26 @@ class SharedViewModel @Inject constructor(
     private val todoRepository: TodoRepository
 ) : ViewModel() {
 
-    val query = MutableLiveData("")
-    private val todoLiveData = query.switchMap {
-        todoRepository.getAllTodoLiveData(it)
-    }
-
     val searchQuery = MutableStateFlow("")
+//    private val todoFlow = searchQuery.flatMapLatest {
+//        todoRepository.getAllTodosBySearch(it)
+//    }
+
     val sortOrder = MutableStateFlow(SortOrder.BY_TITLE)
+    val hideCompleted = MutableStateFlow(false)
+
+    private val todoEventChannel = Channel<TodoEvent>()
+    val todoEvent = todoEventChannel.receiveAsFlow()
+
 
     private val todoFlow = combine(
         searchQuery,
-        sortOrder
-    ) { query, sortOrder ->
-        Pair(query, sortOrder)
+        sortOrder,
+        hideCompleted,
+    ) { query, sortOrder, hideCompleted ->
+        Triple(query, sortOrder, hideCompleted)
     }.flatMapLatest {
-        todoRepository.getAllTodos(it.first, it.second)
+        todoRepository.getAllTodos(it.first, it.second, it.third)
     }
 
     val allTodos = todoFlow.asLiveData(viewModelScope.coroutineContext)
@@ -51,6 +58,7 @@ class SharedViewModel @Inject constructor(
     fun onDeleteTodo(todo: Todo) {
         viewModelScope.launch {
             todoRepository.deleteTodo(todo)
+            todoEventChannel.send(TodoEvent.ShowUndoDeleteMessage(todo))
         }
     }
 
@@ -59,6 +67,16 @@ class SharedViewModel @Inject constructor(
             todoRepository.updateTodoStatus(id, isDone)
         }
     }
+
+    fun onUndoDelete(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.saveNewTodo(todo)
+        }
+    }
+}
+
+sealed class TodoEvent{
+    data class ShowUndoDeleteMessage(val todo: Todo): TodoEvent()
 }
 
 

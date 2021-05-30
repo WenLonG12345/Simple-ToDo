@@ -24,9 +24,13 @@
                 android:id="@+id/action_sort_by_date_created"
                 android:title="Sort by Date Created"/>
 
-
         </menu>
 
-
     </item>
+
+    <item
+        android:id="@+id/action_hide_completed"
+        android:checkable="true"
+        android:title="Hide Completed"
+        app:showAsAction="never"/>
 </menu>

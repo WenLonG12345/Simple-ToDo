@@ -12,20 +12,20 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(data: Todo): Long
 
-    @Query("SELECT * FROM todo WHERE title LIKE '%' || :searchQuery || '%'")
-    fun listAllLiveData(searchQuery: String): LiveData<List<Todo>>
-
-    fun getAllTodos(searchQuery: String, sortOrder: SortOrder) =
+    fun getAllTodos(searchQuery: String, sortOrder: SortOrder, hideCompleted: Boolean) =
         when(sortOrder) {
-            SortOrder.BY_TITLE -> getAllTodoSortedByTitle(searchQuery)
-            SortOrder.BY_DATE_CREATED -> getAllTodoSortedByDateCreated(searchQuery)
+            SortOrder.BY_TITLE -> getAllTodoSortedByTitle(searchQuery, hideCompleted)
+            SortOrder.BY_DATE_CREATED -> getAllTodoSortedByDateCreated(searchQuery, hideCompleted)
         }
 
-    @Query("SELECT * FROM todo WHERE title LIKE '%' || :searchQuery || '%' ORDER BY title")
-    fun getAllTodoSortedByTitle(searchQuery: String): Flow<List<Todo>>
+    @Query("SELECT * FROM todo WHERE (is_task_done != :hideCompleted OR is_task_done = 0) AND title LIKE '%' || :searchQuery || '%' ORDER BY title")
+    fun getAllTodoSortedByTitle(searchQuery: String, hideCompleted: Boolean): Flow<List<Todo>>
 
-    @Query("SELECT * FROM todo WHERE title LIKE '%' || :searchQuery || '%' ORDER BY created_at DESC")
-    fun getAllTodoSortedByDateCreated(searchQuery: String): Flow<List<Todo>>
+    @Query("SELECT * FROM todo WHERE (is_task_done != :hideCompleted OR is_task_done = 0) AND title LIKE '%' || :searchQuery || '%' ORDER BY created_at DESC")
+    fun getAllTodoSortedByDateCreated(searchQuery: String, hideCompleted: Boolean): Flow<List<Todo>>
+
+    @Query("SELECT * FROM todo WHERE title LIKE '%' || :searchQuery || '%'")
+    fun getAllTodoBySearch(searchQuery: String): Flow<List<Todo>>
 
     @Delete
     fun delete(data: Todo)
